@@ -24,8 +24,8 @@ export class Category {
   parent: Category
 
   @OneToMany(() => Category, (category: Category) => category.parent_category_id)
-  children: Category[];
+  children: Category[]
 
   @OneToMany(() => Job, (job: Job) => job.category_id)
-  jobs: Job[];
+  jobs: Job[]
 }

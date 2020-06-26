@@ -11,12 +11,22 @@ import {
 import { Category } from './category.model'
 import { Suburb } from './suburb.model'
 
+export enum JobStatus {
+  NEW = 'new',
+  ACCEPTED = "accepted",
+  DECLINED = "declined"
+}
+
 @Entity("jobs")
 export class Job {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: JobStatus,
+    default: JobStatus.NEW
+  })
   status: string
 
   @Column()

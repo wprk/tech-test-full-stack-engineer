@@ -12,7 +12,7 @@ describe('HealthcheckController', () => {
     }).compile()
 
     healthcheckController = app.get<HealthcheckController>(HealthcheckController)
-  });
+  })
 
   describe('root', () => {
     it('should return "success"', () => {

@@ -1,10 +1,10 @@
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import database from './config/database.config'
 import server from './config/server.config'
-import { RoutesModule } from './routes/routes.module'
+import { RoutesModule } from './modules/routes.module'
 
 @Module({
   imports: [
@@ -30,5 +30,7 @@ import { RoutesModule } from './routes/routes.module'
       }),
     }),
   ],
+  providers: [],
+  controllers: [],
 })
 export class AppModule {}

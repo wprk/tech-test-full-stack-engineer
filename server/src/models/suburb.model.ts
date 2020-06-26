@@ -19,5 +19,5 @@ export class Suburb {
   postcode: string
 
   @OneToMany(() => Job, (job: Job) => job.suburb_id)
-  jobs: Job[];
+  jobs: Job[]
 }

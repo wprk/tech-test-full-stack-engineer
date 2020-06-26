@@ -13,8 +13,13 @@ For the backend however I decided to make a change and switch out the boilerplat
 # Backend
 
 ### Authentication
+This application would require authentication to be used in the real world. I will add this functionality last if I have time.
+
+### Config
+I chose to use NestJS config library to ensure I didn't keep environment specific variables in the codebase. This will allow the codebase to be deployed to a different server environment more easily. I did however commit my .env file as this is a test project and you will need to run it. In a real application I would never do this however I may have a .env.example file with placeholder variables to help other developers populate those fields if nessecary.
 
 ### Database
+For database connection I used 
 
 ### Routes
 

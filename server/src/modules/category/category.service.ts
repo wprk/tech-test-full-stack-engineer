@@ -15,6 +15,6 @@ export class CategoryService {
   }
 
   async findOne(id: number): Promise<Category> {
-    return this.categoryRepository.findOne(id)
+    return this.categoryRepository.findOneOrFail(id)
   }
 }

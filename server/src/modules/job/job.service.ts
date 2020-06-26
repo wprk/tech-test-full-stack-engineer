@@ -16,7 +16,7 @@ export class JobService {
   }
 
   async findOne(id: number): Promise<Job> {
-    return await this.jobRepository.findOne(id)
+    return await this.jobRepository.findOneOrFail(id)
   }
 
   async update(id: number, data: UpdateJobDto): Promise<Job> {

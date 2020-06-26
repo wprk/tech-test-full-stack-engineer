@@ -16,6 +16,6 @@ export class SuburbService {
   }
 
   async findOne(id: number): Promise<Suburb> {
-    return this.suburbRepository.findOne(id)
+    return this.suburbRepository.findOneOrFail(id)
   }
 }

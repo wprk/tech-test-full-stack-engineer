@@ -9,7 +9,7 @@ async function bootstrap() {
   const serverConfig: ConfigService = app.get(ConfigService)
   app.enableCors()
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
-  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalPipes(new ValidationPipe({ transform: true }))
   await app.listen(serverConfig.get<number>('server.port'))
 }
 bootstrap()

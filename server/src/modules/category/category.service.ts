@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+
+import { CategoriesResponseDto } from './dto/categories.response.dto'
+import { CategoryFindAllInput } from './dto/category.find-all.input'
+import { CategoryResponseDto } from './dto/category.response.dto'
 import { Category } from 'src/models/category.model'
+import { getAsFindManyOptions } from 'src/utils/repository-find-options.util'
 
 @Injectable()
 export class CategoryService {
@@ -10,11 +15,22 @@ export class CategoryService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
-  async findAll(): Promise<Category[]> {
-    return this.categoryRepository.find()
+  async findAll(
+    criteria: CategoryFindAllInput,
+  ): Promise<CategoriesResponseDto> {
+    const total = await this.categoryRepository.count()
+
+    return {
+      data: await this.categoryRepository.find(getAsFindManyOptions(criteria)),
+      limit: criteria.limit,
+      page: criteria.page,
+      total,
+    }
   }
 
-  async findOne(id: number): Promise<Category> {
-    return this.categoryRepository.findOneOrFail(id)
+  async findOne(id: number): Promise<CategoryResponseDto> {
+    return {
+      data: await this.categoryRepository.findOneOrFail(id)
+    }
   }
 }

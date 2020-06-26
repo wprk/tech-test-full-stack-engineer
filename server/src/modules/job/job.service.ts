@@ -1,8 +1,13 @@
 import { Injectable, BadRequestException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+
+import { JobUpdateInput } from './dto/job.update.input'
+import { JobResponseDto } from './dto/job.response.dto'
+import { JobsResponseDto } from './dto/jobs.response.dto'
 import { Job, JobStatus } from 'src/models/job.model'
-import { UpdateJobDto } from './updateJob.dto'
+import { JobFindAllInput } from 'src/modules/job/dto/job.find-all.input'
+import { getAsFindManyOptions } from 'src/utils/repository-find-options.util'
 
 @Injectable()
 export class JobService {
@@ -11,16 +16,27 @@ export class JobService {
     private readonly jobRepository: Repository<Job>,
   ) {}
 
-  async findAll(): Promise<Job[]> {
-    return await this.jobRepository.find()
+  async findAll(
+    criteria: JobFindAllInput,
+  ): Promise<JobsResponseDto> {
+    const total = await this.jobRepository.count()
+
+    return {
+      data: await this.jobRepository.find(getAsFindManyOptions(criteria)),
+      limit: criteria.limit,
+      page: criteria.page,
+      total,
+    }
   }
 
-  async findOne(id: number): Promise<Job> {
-    return await this.jobRepository.findOneOrFail(id)
+  async findOne(id: number): Promise<JobResponseDto> {
+    return {
+      data: await this.jobRepository.findOneOrFail(id)
+    }
   }
 
-  async update(id: number, data: UpdateJobDto): Promise<Job> {
-    const job = await this.findOne(id)
+  async update(id: number, data: JobUpdateInput): Promise<JobResponseDto> {
+    const job = await this.jobRepository.findOneOrFail(id)
 
     if (!this.isValidNextStatuses(job.status, data.status)) {
       throw new BadRequestException(`Unable to change status for job ${job.id} to ${data.status}`)
@@ -28,7 +44,9 @@ export class JobService {
 
     job.status = data.status
 
-    return this.jobRepository.save(job)
+    return {
+      data: await this.jobRepository.save(job)
+    }
   }
 
   isValidNextStatuses(currentStatus: string, newStatus: string): boolean {

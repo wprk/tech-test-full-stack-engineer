@@ -3,6 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { Suburb } from 'src/models/suburb.model'
+import { SuburbFindAllInput } from './dto/suburb.find-all.input'
+import { SuburbsResponseDto } from './dto/suburbs.response.dto'
+import { getAsFindManyOptions } from 'src/utils/repository-find-options.util'
+import { SuburbResponseDto } from './dto/suburb.response.dto'
 
 @Injectable()
 export class SuburbService {
@@ -11,11 +15,22 @@ export class SuburbService {
     private readonly suburbRepository: Repository<Suburb>,
   ) {}
 
-  async findAll(): Promise<Suburb[]> {
-    return this.suburbRepository.find()
+  async findAll(
+    criteria: SuburbFindAllInput,
+  ): Promise<SuburbsResponseDto> {
+    const total = await this.suburbRepository.count()
+
+    return {
+      data: await this.suburbRepository.find(getAsFindManyOptions(criteria)),
+      limit: criteria.limit,
+      page: criteria.page,
+      total,
+    }
   }
 
-  async findOne(id: number): Promise<Suburb> {
-    return this.suburbRepository.findOneOrFail(id)
+  async findOne(id: number): Promise<SuburbResponseDto> {
+    return {
+      data: await this.suburbRepository.findOneOrFail(id)
+    }
   }
 }

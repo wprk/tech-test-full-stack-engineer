@@ -5,10 +5,10 @@ import CardSection from '../CardSection'
 import DetailsSection from './DetailsSection'
 import HeaderSection from './HeaderSection'
 import DescriptionSection from './DescriptionSection'
-import Job from '../../../interfaces/Job'
+import JobResource from '../../../resources/JobResource'
 
 interface IProps {
-  job: Job
+  job: JobResource
 }
 
 const AcceptedJobCard = ({ job }: IProps) => (

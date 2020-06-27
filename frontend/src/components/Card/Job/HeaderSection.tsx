@@ -1,10 +1,10 @@
 import React from 'react'
 
-import Job from '../../../interfaces/Job'
 import CardSection from '../CardSection'
+import JobResource from '../../../resources/JobResource'
 
 interface IProps {
-  job: Job
+  job: JobResource
 }
 
 const HeaderSection = ({ job }: IProps) => (
@@ -33,7 +33,7 @@ const HeaderSection = ({ job }: IProps) => (
           </dt>
           <dd>
             <span className="text-gray-600 text-sm">
-              <time dateTime={job.created_at.unix.toString()}>{ job.created_at.format('MMMM D Y @ h:mm a') }</time>
+              <time dateTime={job.createdAt.unix.toString()}>{ job.createdAt.format('MMMM D Y @ h:mm a') }</time>
             </span>
           </dd>
         </div>

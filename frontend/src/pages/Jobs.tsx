@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
+import { NetworkErrorBoundary } from 'rest-hooks';
 import classNames from 'classnames'
+
 import NewJobsList from '../components/NewJobsList'
 import AcceptedJobsList from '../components/AcceptedJobsList'
-import { JobStatus } from '../interfaces/Job'
+import { JobStatus } from '../resources/JobResource'
+import Loading from '../components/Loading';
 
 const Tabs = ({ children }: any) => (
-  <div className="w-full shadow-md shadow-lg rounded flex bg-gray-100">
+  <div className="w-full shadow-md rounded flex bg-gray-100">
     { children }
   </div>
 )
@@ -49,12 +52,16 @@ const Jobs = () => {
             </Tab>
           </React.Fragment>
         </Tabs>
-        {activeTab === JobStatus.NEW && (
-          <NewJobsList />
-        )}
-        {activeTab === JobStatus.ACCEPTED && (
-          <AcceptedJobsList />
-        )}
+        <Suspense fallback={<Loading />}>
+          <NetworkErrorBoundary>
+            {activeTab === JobStatus.NEW && (
+              <NewJobsList />
+            )}
+            {activeTab === JobStatus.ACCEPTED && (
+              <AcceptedJobsList />
+            )}
+          </NetworkErrorBoundary>
+        </Suspense>
       </div>
     </div>
   );

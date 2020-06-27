@@ -6,11 +6,11 @@ import CardSection from '../CardSection'
 import HeaderSection from './HeaderSection'
 import DescriptionSection from './DescriptionSection'
 import DetailsSection from './DetailsSection'
-import Job from '../../../interfaces/Job'
 import Button from '../../Button'
+import JobResource from '../../../resources/JobResource'
 
 interface IProps {
-  job: Job
+  job: JobResource
 }
 
 const NewJobCard = ({ job }: IProps) => (

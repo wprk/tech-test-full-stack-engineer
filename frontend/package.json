@@ -21,6 +21,7 @@
     "react-number-format": "^4.4.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "rest-hooks": "^4.5.9",
     "tailwindcss-truncate-multiline": "^1.0.3",
     "typescript": "~3.7.2"
   },
@@ -54,5 +55,8 @@
     "autoprefixer": "^9.8.4",
     "postcss-cli": "^7.1.1",
     "tailwindcss": "^1.4.6"
+  },
+  "resolutions": {
+    "@rest-hooks/use-enhanced-reducer": "1.0.2"
   }
 }

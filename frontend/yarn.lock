@@ -1005,7 +1005,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.3", "@babel/runtime@^7.5.1", "@babel/runtime@^7.5.5":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.3", "@babel/runtime@^7.5.1", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.0":
   version "7.10.3"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.10.3.tgz#670d002655a7c366540c67f6fd3342cd09500364"
   integrity sha512-RzGO0RLSdokm9Ipe/YD+7ww8X2Ro79qiXZF3HU9ljrM+qnJmH1Vqth+hbiQZy761LnMJTMitHDuKVYTk3k4dLw==
@@ -1327,6 +1327,18 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
+
+"@rest-hooks/normalizr@^5.0.6":
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@rest-hooks/normalizr/-/normalizr-5.0.6.tgz#492b8934ee86291b664e927ba3e727db75090f51"
+  integrity sha512-eHKpzNPh6bTiyAshmnpXTUg0qMXDGthG61DpiPfRHpq5vl7mtX+t+EVQKi2VXnRZH+SefJF3q8KuAp1O6UcbMA==
+  dependencies:
+    "@babel/runtime" "^7.7.0"
+
+"@rest-hooks/use-enhanced-reducer@1.0.2", "@rest-hooks/use-enhanced-reducer@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@rest-hooks/use-enhanced-reducer/-/use-enhanced-reducer-1.0.2.tgz#3a739cb1ac63d9971e3610492cab2dbe728785ca"
+  integrity sha512-3hgRHN3MCVxN1XZYa/VxOKsC5y2DwcUGWa6WV/htnn0+zfSJPqxoEHQFVPoukkJ1Yf9sPRVde4nwpS1XioonwA==
 
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.3"
@@ -4828,6 +4840,13 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
+
+flux-standard-action@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/flux-standard-action/-/flux-standard-action-2.1.1.tgz#b2e204145ea8e4294d6b0f178d8e8c416802948f"
+  integrity sha512-W86GzmXmIiTVq/dpYVd2HtTIUX9c35Iq3ao3xR6qcKtuXgbu+BDEj72op5VnEIe/kpuSbhl+I8kT1iS2hpcusw==
+  dependencies:
+    lodash "^4.17.15"
 
 follow-redirects@^1.0.0:
   version "1.10.0"
@@ -9560,6 +9579,16 @@ resolve@^1.14.2:
   integrity sha512-ic+7JYiV8Vi2yzQGFWOkiZD5Z9z7O2Zhm9XMaTxdJExKasieFCr+yXZ/WmXsckHiKl12ar0y6XiXDx3m4RHn1w==
   dependencies:
     path-parse "^1.0.6"
+
+rest-hooks@^4.5.9:
+  version "4.5.9"
+  resolved "https://registry.yarnpkg.com/rest-hooks/-/rest-hooks-4.5.9.tgz#d9c4013a4da097b1ec14a55a68c0108472fd69da"
+  integrity sha512-QKj+c+WffnpBSVEIFPcF39D0si9Eh3fLxyTBmRPRM8YrfipuGyiK6EDQpBYUQQysE43gNg2FTH4t/CZLxnNvEg==
+  dependencies:
+    "@babel/runtime" "^7.7.2"
+    "@rest-hooks/normalizr" "^5.0.6"
+    "@rest-hooks/use-enhanced-reducer" "^1.0.2"
+    flux-standard-action "^2.1.1"
 
 restore-cursor@^3.1.0:
   version "3.1.0"

@@ -2,12 +2,12 @@ import { Injectable, BadRequestException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
+import { JobFindAllInput } from './dto/job.find-all.input'
 import { JobUpdateInput } from './dto/job.update.input'
 import { JobResponseDto } from './dto/job.response.dto'
 import { JobsResponseDto } from './dto/jobs.response.dto'
-import { Job, JobStatus } from 'src/models/job.model'
-import { JobFindAllInput } from 'src/modules/job/dto/job.find-all.input'
-import { getAsFindManyOptions } from 'src/utils/repository-find-options.util'
+import { Job, JobStatus } from '../../models/job.model'
+import { getAsFindManyOptions } from '../../utils/repository-find-options.util'
 
 @Injectable()
 export class JobService {

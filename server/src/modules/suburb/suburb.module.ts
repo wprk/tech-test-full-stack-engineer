@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { SuburbController } from './suburb.controller'
 import { SuburbService } from './suburb.service'
-import { Suburb } from 'src/models/suburb.model'
+import { Suburb } from '../../models/suburb.model'
 
 @Module({
   imports: [

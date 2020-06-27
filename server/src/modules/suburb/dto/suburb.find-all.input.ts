@@ -1,3 +1,3 @@
-import { PaginationInput } from 'src/dto/pagination.input'
+import { PaginationInput } from '../../../dto/pagination.input'
 
 export class SuburbFindAllInput extends PaginationInput {}

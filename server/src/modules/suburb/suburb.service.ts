@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { Suburb } from 'src/models/suburb.model'
+import { Suburb } from '../../models/suburb.model'
 import { SuburbFindAllInput } from './dto/suburb.find-all.input'
-import { SuburbsResponseDto } from './dto/suburbs.response.dto'
-import { getAsFindManyOptions } from 'src/utils/repository-find-options.util'
 import { SuburbResponseDto } from './dto/suburb.response.dto'
+import { SuburbsResponseDto } from './dto/suburbs.response.dto'
+import { getAsFindManyOptions } from '../../utils/repository-find-options.util'
 
 @Injectable()
 export class SuburbService {

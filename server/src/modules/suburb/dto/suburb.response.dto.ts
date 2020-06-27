@@ -1,4 +1,4 @@
-import { Suburb } from 'src/models/suburb.model'
+import { Suburb } from '../../../models/suburb.model'
 
 export class SuburbResponseDto {
   data: Suburb

@@ -3,7 +3,7 @@ import { HealthcheckController } from './healthcheck.controller'
 import { HealthcheckService } from './healthcheck.service'
 
 describe('HealthcheckController', () => {
-  let healthcheckController: HealthcheckController
+  let controller: HealthcheckController
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -11,12 +11,12 @@ describe('HealthcheckController', () => {
       providers: [HealthcheckService],
     }).compile()
 
-    healthcheckController = app.get<HealthcheckController>(HealthcheckController)
+    controller = app.get<HealthcheckController>(HealthcheckController)
   })
 
   describe('root', () => {
     it('should return "success"', () => {
-      expect(healthcheckController.getHealthcheck()).toBe('success')
+      expect(controller.getHealthcheck()).toMatchObject({ status: 'success' })
     })
   })
 })

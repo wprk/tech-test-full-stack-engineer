@@ -8,11 +8,11 @@ import {
   Query,
 } from '@nestjs/common'
 
-import { JobService } from './job.service'
+import { JobFindAllInput } from './dto/job.find-all.input'
 import { JobUpdateInput } from './dto/job.update.input'
 import { JobsResponseDto } from './dto/jobs.response.dto'
 import { JobResponseDto } from './dto/job.response.dto'
-import { JobFindAllInput } from 'src/modules/job/dto/job.find-all.input'
+import { JobService } from './job.service'
 
 @Controller('jobs')
 export class JobController {

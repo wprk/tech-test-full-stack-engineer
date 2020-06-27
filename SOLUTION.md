@@ -66,3 +66,4 @@ I have added unit tests to all my controllers and services as well as several in
 - Automated linting and test validation on commit / build
 - Improve documentation, potentially add an OpenAPI library like Swagger for self-documenting API
 - Add infrastructure as code to facilitate CICD
+- Dont expose the id of jobs table and add a non-incremental id to prevent enumeration attacks

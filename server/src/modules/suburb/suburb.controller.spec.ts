@@ -26,6 +26,10 @@ describe('Suburb Controller', () => {
 
     controller = module.get<SuburbController>(SuburbController)
   })
+  
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
   it('should be defined', () => {
     expect(controller).toBeDefined()

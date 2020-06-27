@@ -5,12 +5,9 @@ export const getAsFindManyOptions = ({
   page,
   ...criteria
 }): FindManyOptions<any> => {
-  const pageNo = page || 1
-  const perPage = limit || 5
-
   return {
-    skip: (pageNo - 1) * perPage,
-    take: perPage,
+    skip: (page - 1) * limit,
+    take: limit,
     where: criteria,
   }
 }

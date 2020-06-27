@@ -5,8 +5,8 @@ import { Repository } from 'typeorm'
 import { CategoriesResponseDto } from './dto/categories.response.dto'
 import { CategoryFindAllInput } from './dto/category.find-all.input'
 import { CategoryResponseDto } from './dto/category.response.dto'
-import { Category } from '../../../src/models/category.model'
-import { getAsFindManyOptions } from '../../../src/utils/repository-find-options.util'
+import { Category } from '../../models/category.model'
+import { getAsFindManyOptions } from '../../utils/repository-find-options.util'
 
 @Injectable()
 export class CategoryService {

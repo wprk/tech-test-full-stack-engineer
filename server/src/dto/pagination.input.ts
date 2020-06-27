@@ -1,16 +1,18 @@
 import { isNumber } from "util"
 
 import { Transform } from 'class-transformer'
-import { IsInt, IsOptional } from 'class-validator'
+import { IsInt, IsOptional, Min } from 'class-validator'
 
 export class PaginationInput {
   @Transform(parseInt)
   @IsInt()
   @IsOptional()
-  limit: number
+  @Min(0)
+  limit: number = 5
   
   @Transform(parseInt)
   @IsInt()
   @IsOptional()
-  page: number
+  @Min(1)
+  page: number = 1
 }

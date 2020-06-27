@@ -21,6 +21,10 @@ describe('JobService', () => {
 
     service = module.get<JobService>(JobService)
   })
+  
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
   it('should be defined', () => {
     expect(service).toBeDefined()

@@ -13,7 +13,11 @@ describe('Category Controller', () => {
       limit: 5,
     }),
     findOne: jest.fn().mockResolvedValue({ data: {} }),
-  };
+  }
+  
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

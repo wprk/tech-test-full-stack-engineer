@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const serverConfig: ConfigService = app.get(ConfigService)
   app.enableCors()
-  app.useGlobalFilters(new EntityNotFoundExceptionFilter());
-  app.useGlobalPipes(new ValidationPipe({ transform: true }))
+  app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
   await app.listen(serverConfig.get<number>('server.port'))
 }
 bootstrap()

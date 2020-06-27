@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  ui:
+  frontend:
     entrypoint: ["npm", "start"]
     environment:
       NODE_ENV: development
@@ -9,8 +9,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./ui:/opt/ui
-    working_dir: /opt/ui
+      - ./frontend:/opt/frontend
+    working_dir: /opt/frontend
 
   server:
     entrypoint: ["npm", "start"]

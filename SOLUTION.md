@@ -7,6 +7,16 @@ I began this project by considering the application requirements. There will be 
 ## Frontend
 I considered several frameworks for the frontend. It made sense to use React as that is what you use at HiPages and is the frontend framework I'm most familiar with. For boilerplates I considered NextJS, Gatsby and CRA but as this SPA will be behind an paywall the benefits provided by NextJS and Gatsby such as SSR and static page generation didn't really provide much benefit over the slimmed down CRA boilerplate you already provided.
 
+For the UI I decided to use Tailwind as it's something I use in a lot of my personal projects and am very familiar with. I like using tailwind because:
+- it is highly customisable
+- has a built in design system as you can only use styles you have already defined in your configuration
+- increases development speed by eliminating context switching between styles and markup
+- couples the styles tightly with the markup and when using a library like React this forces you to create reusable components
+- Using it's built in PurgeCss library provides smaller stylesheets
+- Responsive capabilities out of the box
+
+I chose to use npm for package management because that's what you had set up the boilerplate to use. I usually use Yarn in my personal projects as for a while it was faster and it supports workspaces but in recent years npm has improved significantly and with new features such as its vulnerability audits I'm not sure which is the better choice these days.
+
 ## Backend
 For the backend however I decided to make a change and switch out the boilerplate provided for a typescript installation of NestJS. In terms of performance benefits it doesn't really provide any over the express boilerplate provided as NestJS is just a wrapper around express but it will allow me to create a much cleaner codebase. I plan to use several of NestJs libraries such as authentication, config, database and validation.
 
@@ -44,3 +54,15 @@ I have used services extensively in this application. Realistically because of i
 I have added unit tests to all my controllers and services as well as several integration tests. If I had time I would strive for 100% test coverage. I will also add regression tests as I begin development on the frontend should I find any bugs in the backend.
 
 # Frontend
+
+
+
+# Potential improvements
+- Authentication
+  - Users
+  - Permissions
+- Full test coverage
+- Apply authentication and authorisation middleware to endpoints
+- Automated linting and test validation on commit / build
+- Improve documentation, potentially add an OpenAPI library like Swagger for self-documenting API
+- Add infrastructure as code to facilitate CICD

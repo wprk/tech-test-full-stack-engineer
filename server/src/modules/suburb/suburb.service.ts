@@ -18,7 +18,7 @@ export class SuburbService {
   async findAll(
     criteria: SuburbFindAllInput,
   ): Promise<SuburbsResponseDto> {
-    const total = await this.suburbRepository.count()
+    const total = await this.suburbRepository.count(getAsFindManyOptions(criteria))
 
     return {
       data: await this.suburbRepository.find(getAsFindManyOptions(criteria)),

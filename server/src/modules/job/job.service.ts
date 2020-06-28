@@ -19,7 +19,7 @@ export class JobService {
   async findAll(
     criteria: JobFindAllInput,
   ): Promise<JobsResponseDto> {
-    const total = await this.jobRepository.count()
+    const total = await this.jobRepository.count(getAsFindManyOptions(criteria))
 
     return {
       data: await this.jobRepository.find(getAsFindManyOptions(criteria)),

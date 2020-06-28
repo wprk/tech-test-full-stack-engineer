@@ -18,7 +18,7 @@ export class CategoryService {
   async findAll(
     criteria: CategoryFindAllInput,
   ): Promise<CategoriesResponseDto> {
-    const total = await this.categoryRepository.count()
+    const total = await this.categoryRepository.count(getAsFindManyOptions(criteria))
 
     return {
       data: await this.categoryRepository.find(getAsFindManyOptions(criteria)),

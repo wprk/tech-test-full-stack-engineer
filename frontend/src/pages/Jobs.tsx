@@ -6,6 +6,7 @@ import NewJobsList from '../components/NewJobsList'
 import AcceptedJobsList from '../components/AcceptedJobsList'
 import { JobStatus } from '../resources/JobResource'
 import Loading from '../components/Loading';
+import JobsListError from '../components/JobsListError';
 
 const Tabs = ({ children }: any) => (
   <div className="w-full shadow-md rounded flex bg-gray-100">
@@ -53,7 +54,7 @@ const Jobs = () => {
           </React.Fragment>
         </Tabs>
         <Suspense fallback={<Loading />}>
-          <NetworkErrorBoundary>
+          <NetworkErrorBoundary fallbackComponent={JobsListError}>
             {activeTab === JobStatus.NEW && (
               <NewJobsList />
             )}

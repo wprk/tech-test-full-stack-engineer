@@ -1,6 +1,8 @@
 import { Resource } from 'rest-hooks'
 import moment from 'moment'
 
+import { API_PATH } from '../config/index'
+
 export enum JobStatus {
   NEW = 'new',
   ACCEPTED = "accepted",
@@ -32,7 +34,14 @@ export default class JobResource extends Resource {
     return moment(this.updated_at);
   }
 
-  static urlRoot = 'http://localhost:8080/jobs';
+  static urlRoot = `${API_PATH}/jobs`;
+
+  static detailShape<T extends typeof Resource>(this: T) {
+    return {
+      ...super.detailShape(),
+      schema: { data: this.asSchema() },
+    };
+  }
 
   static listShape<T extends typeof Resource>(this: T) {
     return {

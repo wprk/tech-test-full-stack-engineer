@@ -1,4 +1,4 @@
-import { Resource } from 'rest-hooks'
+import { Resource, MutateShape, SchemaDetail, AbstractInstanceType } from 'rest-hooks'
 import moment from 'moment'
 
 import { API_PATH } from '../config/index'
@@ -47,6 +47,19 @@ export default class JobResource extends Resource {
     return {
       ...super.listShape(),
       schema: { data: [this.asSchema()] },
+    };
+  }
+  
+  static partialUpdateShape<T extends typeof Resource>(
+    this: T,
+  ): MutateShape<
+    SchemaDetail<Readonly<AbstractInstanceType<T>>>,
+    Readonly<object>,
+    Partial<AbstractInstanceType<T>>
+  > {
+    return {
+      ...super.partialUpdateShape(),
+      schema: { data: this.asSchema() },
     };
   }
 }

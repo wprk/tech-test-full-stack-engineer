@@ -1,19 +1,19 @@
 version: '3'
 
 services:
-  # frontend:
-  #   entrypoint: ["npm", "start"]
-  #   environment:
-  #     NODE_ENV: development
-  #   image: node:10.15-alpine
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend:/opt/frontend
-  #   working_dir: /opt/frontend
-  #   tty: true
-  #   networks:
-  #     - hipages
+  frontend:
+    entrypoint: ["npm", "start"]
+    environment:
+      NODE_ENV: development
+    image: node:10.15-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/opt/frontend
+    working_dir: /opt/frontend
+    tty: true
+    networks:
+      - hipages
 
   server:
     entrypoint: ["npm", "start"]

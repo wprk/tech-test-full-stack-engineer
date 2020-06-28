@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Schema, ReadShape, useInvalidator } from 'rest-hooks';
 
 export function useInvalidateOnUnmount<
@@ -9,5 +9,5 @@ export function useInvalidateOnUnmount<
 
   useEffect(() => {
     return () => invalidate(params);
-  }, []);
+  }, [invalidate, params]);
 }

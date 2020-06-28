@@ -35,7 +35,7 @@ const NewJobCard = ({ job, queryParams }: IProps) => {
         }
       ],
     ])
-  }, [update]);
+  }, [queryParams, update]);
   
   return (
     <Card>

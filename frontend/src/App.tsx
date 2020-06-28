@@ -2,13 +2,16 @@ import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import Routes from './Routes'
+import AuthProvider from './providers/AuthProvider'
 
 const App = () => {
   return (
-    <Router>
-      <Routes />
-    </Router>
-  );
+    <AuthProvider>
+      <Router>
+        <Routes />
+      </Router>
+    </AuthProvider>
+  )
 }
 
-export default App;
+export default App

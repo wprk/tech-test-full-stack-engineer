@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { Route, Redirect } from 'react-router-dom'
+
 import FullScreenLoading from './components/FullScreenLoading'
+import { AuthContext } from './providers/AuthProvider'
 
 const ProtectedRoute = ({ component: RouteComponent, ...rest }: any) => {
-  const [isAuthenticated] = useState(false)
-  const [isAuthenticating] = useState(false)
+  const { isAuthenticated, isAuthenticating } = useContext(AuthContext)
  
   const showProtectedRoute = () => (
     <Route

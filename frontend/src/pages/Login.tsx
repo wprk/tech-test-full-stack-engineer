@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+
 import logoImg from '../assets/logo.png'
 import Button from '../components/Button'
+import { AuthContext } from '../providers/AuthProvider'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
-  const onLogin = () => console.log('logging in')
-  const onLoginWithFacebook = () => console.log('logging in with Facebook')
-  const onLoginWithTwitter = () => console.log('logging in with Twitter')
-  const onLoginWithGitHub = () => console.log('logging in with Github')
+  const { isAuthenticated, onLogin, onLoginWithFacebook, onLoginWithTwitter, onLoginWithGitHub } = useContext(AuthContext)
+  const history = useHistory()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.replace('/')
+    }
+  }, [history, isAuthenticated])
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -23,15 +30,15 @@ const Login = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form action="#" onSubmit={(e: React.FormEvent) => {
-              e.preventDefault()
-              onLogin()
-            }}>
+            e.preventDefault()
+            onLogin('test@example.com', 'password123')
+          }}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-5 text-gray-700">
                 Email address
               </label>
               <div className="mt-1 rounded-md shadow-sm">
-                <input id="email" type="email" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                <input autoComplete="on" id="email" type="email" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
               </div>
             </div>
 
@@ -40,7 +47,7 @@ const Login = () => {
                 Password
               </label>
               <div className="mt-1 rounded-md shadow-sm">
-                <input id="password" type="password" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
+                <input autoComplete="on" id="password" type="password" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
               </div>
             </div>
 

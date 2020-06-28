@@ -8,6 +8,12 @@ export const getAsFindManyOptions = ({
   return {
     skip: (page - 1) * limit,
     take: limit,
-    where: criteria,
+    where: removeUndefinedCriteria(criteria),
   }
+}
+
+const removeUndefinedCriteria = (criteria): object => {
+  Object.keys(criteria).forEach((key) => (criteria[key] == null) && delete criteria[key])
+
+  return criteria;
 }

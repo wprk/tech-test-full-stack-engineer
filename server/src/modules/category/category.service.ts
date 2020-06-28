@@ -1,3 +1,4 @@
+import { classToClass } from 'class-transformer'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -19,9 +20,10 @@ export class CategoryService {
     criteria: CategoryFindAllInput,
   ): Promise<CategoriesResponseDto> {
     const total = await this.categoryRepository.count(getAsFindManyOptions(criteria))
+    const categories = await this.categoryRepository.find(getAsFindManyOptions(criteria))
 
     return {
-      data: await this.categoryRepository.find(getAsFindManyOptions(criteria)),
+      data: classToClass(categories),
       limit: criteria.limit,
       page: criteria.page,
       total,
@@ -29,8 +31,10 @@ export class CategoryService {
   }
 
   async findOne(id: number): Promise<CategoryResponseDto> {
+    const category = await this.categoryRepository.findOneOrFail(id)
+    
     return {
-      data: await this.categoryRepository.findOneOrFail(id)
+      data: classToClass(category)
     }
   }
 }

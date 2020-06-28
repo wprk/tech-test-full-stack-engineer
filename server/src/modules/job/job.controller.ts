@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common'
 
 import { JobFindAllInput } from './dto/job.find-all.input'
+import { JobFindOneInput } from './dto/job.find-one.input'
 import { JobUpdateInput } from './dto/job.update.input'
 import { JobsResponseDto } from './dto/jobs.response.dto'
 import { JobResponseDto } from './dto/job.response.dto'
@@ -28,8 +29,9 @@ export class JobController {
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
+    @Query() criteria: JobFindOneInput,
   ): Promise<JobResponseDto> {
-    return await this.jobService.findOne(id)
+    return await this.jobService.findOne(id, criteria)
   }
 
   @Patch(':id')

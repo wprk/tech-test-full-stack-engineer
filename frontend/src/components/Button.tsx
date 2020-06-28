@@ -35,7 +35,7 @@ const Button = ({
   }
 
   const containerClasses = classNames([
-    {'inline-flex shadow-sm': className.length === 0 },
+    {'shadow-sm': className.length === 0 },
     {[className]: className.length > 0 },
   ])
 

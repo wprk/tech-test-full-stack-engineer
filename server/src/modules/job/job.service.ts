@@ -53,10 +53,9 @@ export class JobService {
       throw new BadRequestException(`Unable to change status for job ${job.id} to ${data.status}`)
     }
 
-    job.status = data.status
-
-    job = await this.jobRepository.save(job);
-
+    await this.jobRepository.update({ id: job.id }, data);
+    job = await this.jobRepository.findOneOrFail(id)
+    
     return {
       data: classToClass(job)
     }

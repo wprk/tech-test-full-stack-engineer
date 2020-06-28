@@ -9,7 +9,7 @@ interface IProps {
 
 const JobsListError = ({ error }: IProps) => (
   <Card>
-    <div className="p-4 text-red-500 text-center space-x-1">
+    <div className="p-4 text-sm text-red-500 text-center space-x-1">
       <span>Error {error.status}:</span>
       {error.response && error.response.statusText}
       {!error.response && (

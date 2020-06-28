@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useResource } from 'rest-hooks'
 
 import NewJobCard from './Card/Job/NewJobCard'
@@ -7,11 +7,12 @@ import { useInvalidateOnUnmount } from '../helpers/useInvalidateOnUnmount'
 import JobResource, { JobStatus } from '../resources/JobResource'
 
 const NewJobsList = () => {
-  const queryParams = {
+  const [queryParams] = useState({
     status: JobStatus.NEW,
-    limit: 50,
+    limit: 10,
     page: 1,
-  }
+    with: [ 'category', 'suburb' ]
+  })
   const { data: jobs } = useResource(JobResource.listShape(), queryParams);
   useInvalidateOnUnmount(JobResource.listShape(), queryParams);
 

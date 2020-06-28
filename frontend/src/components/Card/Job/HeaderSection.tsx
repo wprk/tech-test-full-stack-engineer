@@ -16,7 +16,9 @@ const HeaderSection = ({ job }: IProps) => (
             Contact Avatar
           </dt>
           <dd>
-            <img className="w-12 h-12 rounded-full" src={`https://i.pravatar.cc/150?u=${job.contact_email}`} alt={`${job.contact_name} avatar`} />
+            <div className="w-12 h-12 rounded-full bg-hipages-avatar-placeholder flex items-center justify-center">
+              <div className="text-white text-xl font-semibold">{ job.firstInitial }</div>
+            </div>
           </dd>
         </div>
         <div className="">

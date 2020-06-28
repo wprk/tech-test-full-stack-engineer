@@ -17,6 +17,7 @@ module.exports = {
       colors: {
         hipages: {
           orange: '#E65C0D',
+          'avatar-placeholder': '#FF9F42',
           'primary-btn': '#FF7B14',
           'primary-btn-active': '#E65C0D',
           'primary-btn-focus': '#E65C0D',

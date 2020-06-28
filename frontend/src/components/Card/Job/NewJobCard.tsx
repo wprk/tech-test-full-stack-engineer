@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react'
 import NumberFormat from 'react-number-format'
-import { useFetcher } from 'rest-hooks';
+import { useFetcher } from 'rest-hooks'
 
+import Button from '../../Button'
 import Card from '../Card'
 import CardSection from '../CardSection'
 import HeaderSection from './HeaderSection'
 import DescriptionSection from './DescriptionSection'
 import DetailsSection from './DetailsSection'
-import Button from '../../Button'
 import JobResource, { JobStatus } from '../../../resources/JobResource'
 
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const NewJobCard = ({ job, queryParams }: IProps) => {
-  const update = useFetcher(JobResource.partialUpdateShape());
+  const update = useFetcher(JobResource.partialUpdateShape())
 
   const statusChangeHandler = useCallback((
     job: JobResource,
@@ -27,7 +27,7 @@ const NewJobCard = ({ job, queryParams }: IProps) => {
         JobResource.listShape(),
         queryParams,
         (expectedData: any, existingData: any | undefined) => {
-          const jobIds = existingData.data || [];
+          const jobIds = existingData.data || []
           return {
             ...existingData,
             data: jobIds.filter((jobId: any) => jobId !== expectedData.data)
@@ -35,7 +35,7 @@ const NewJobCard = ({ job, queryParams }: IProps) => {
         }
       ],
     ])
-  }, [queryParams, update]);
+  }, [queryParams, update])
   
   return (
     <Card>
@@ -46,11 +46,11 @@ const NewJobCard = ({ job, queryParams }: IProps) => {
         <div className="flex items-center space-x-4">
           <Button text="Accept" type="button" onClick={() => statusChangeHandler(job, JobStatus.ACCEPTED)} action="primary" size="large" />
           <Button text="Decline" type="button" onClick={() => statusChangeHandler(job, JobStatus.DECLINED)} action="secondary" size="large" />
-          <div className="flex items-center space-x-1">
-            <span className="text-gray-600 font-semibold">
+          <div className="pl-4 sm:flex sm:items-center sm:space-x-1">
+            <div className="text-gray-600 font-semibold">
               <NumberFormat decimalScale={2} displayType="text" fixedDecimalScale={true} prefix={'$'} thousandSeparator={true} value={job.price} />
-            </span>
-            <span className="text-gray-600">Lead Invitation</span>
+            </div>
+            <div className="text-gray-600">Lead Invitation</div>
           </div>
         </div>
       </CardSection>

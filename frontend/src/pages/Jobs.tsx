@@ -2,32 +2,13 @@ import React, { Suspense, useState } from 'react'
 import { NetworkErrorBoundary } from 'rest-hooks';
 import classNames from 'classnames'
 
-import NewJobsList from '../components/NewJobsList'
 import AcceptedJobsList from '../components/AcceptedJobsList'
 import { JobStatus } from '../resources/JobResource'
-import Loading from '../components/Loading';
 import JobsListError from '../components/JobsListError';
-
-const Tabs = ({ children }: any) => (
-  <div className="w-full shadow-md rounded flex bg-gray-100">
-    { children }
-  </div>
-)
-
-const Tab = ({ active, children, name, setActive }: any) => (
-  <div className="flex-1 ">
-    <div
-      className={classNames([
-        'flex-1 text-center cursor-pointer border-b-3 py-4 bg-white mx-px',
-        {'border-hipages-orange': active},
-        {'border-transparent': !active}
-      ])}
-      onClick={() => setActive(name)}
-    >
-      { children }
-    </div>
-  </div>
-)
+import JobsListLoading from '../components/JobsListLoading';
+import NewJobsList from '../components/NewJobsList'
+import Tabs from '../components/Tabs/Tabs';
+import Tab from '../components/Tabs/Tab';
 
 const Jobs = () => {
   const [activeTab, setActiveTab] = useState<JobStatus>(JobStatus.NEW)
@@ -53,7 +34,7 @@ const Jobs = () => {
             </Tab>
           </React.Fragment>
         </Tabs>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<JobsListLoading />}>
           <NetworkErrorBoundary fallbackComponent={JobsListError}>
             {activeTab === JobStatus.NEW && (
               <NewJobsList />

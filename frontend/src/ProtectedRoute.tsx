@@ -3,8 +3,8 @@ import { Route, Redirect } from 'react-router-dom'
 import FullScreenLoading from './components/FullScreenLoading'
 
 const ProtectedRoute = ({ component: RouteComponent, ...rest }: any) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true)
-  const [isAuthenticating, setIsAuthenticating] = useState(false)
+  const [isAuthenticated] = useState(true)
+  const [isAuthenticating] = useState(false)
  
   const showProtectedRoute = () => (
     <Route

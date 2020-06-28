@@ -1,7 +1,10 @@
-import { Resource, MutateShape, SchemaDetail, AbstractInstanceType } from 'rest-hooks'
+import { MutateShape, SchemaDetail, AbstractInstanceType, Resource } from 'rest-hooks'
 import moment from 'moment'
 
 import { API_PATH } from '../config/index'
+import BaseResource from './BaseResource'
+import CategoryResource from './CategoryResource'
+import SuburbResource from './SuburbResource'
 
 export enum JobStatus {
   NEW = 'new',
@@ -9,9 +12,9 @@ export enum JobStatus {
   DECLINED = "declined"
 }
 
-export default class JobResource extends Resource {
+export default class JobResource extends BaseResource {
   readonly id: number | undefined = undefined
-  readonly category_id: number | null = null
+  readonly category: CategoryResource | null = null
   readonly contact_name: string = ''
   readonly contact_email: string = ''
   readonly contact_phone: string = ''
@@ -19,18 +22,22 @@ export default class JobResource extends Resource {
   readonly description: string = ''
   readonly price: number = 0
   readonly status: JobStatus = JobStatus.NEW
-  readonly suburb_id: number | null = null
+  readonly suburb: SuburbResource | null = null
   readonly updated_at: Date = new Date(0)
 
   pk() {
     return this.id?.toString();
   }
 
-  get createdAt() {
+  get createdAt(): moment.Moment {
     return moment(this.created_at);
   }
 
-  get updatedAt() {
+  get firstInitial(): string {
+    return this.contact_name.charAt(0).toUpperCase()
+  }
+
+  get updatedAt(): moment.Moment {
     return moment(this.updated_at);
   }
 

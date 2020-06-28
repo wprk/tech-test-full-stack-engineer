@@ -6,11 +6,11 @@ export default abstract class BaseResource extends Resource {
       return super.listUrl(searchParams)
     }
 
-    const params = new URLSearchParams(searchParams as any);
+    const params = new URLSearchParams(searchParams as any)
     relations.forEach((relation: string) => {
       params.append('with', relation)
     })
-    params.sort();
+    params.sort()
 
     return `${this.urlRoot}?${params.toString()}`
   }

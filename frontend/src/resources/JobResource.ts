@@ -2,7 +2,7 @@ import { MutateShape, SchemaDetail, AbstractInstanceType, Resource } from 'rest-
 import moment from 'moment'
 
 import { API_PATH } from '../config/index'
-import BaseResource from './BaseResource'
+import AuthenticatedResource from './AuthenticatedResource'
 import CategoryResource from './CategoryResource'
 import SuburbResource from './SuburbResource'
 
@@ -12,7 +12,7 @@ export enum JobStatus {
   DECLINED = "declined"
 }
 
-export default class JobResource extends BaseResource {
+export default class JobResource extends AuthenticatedResource {
   readonly id: number | undefined = undefined
   readonly category: CategoryResource | null = null
   readonly contact_name: string = ''
@@ -26,11 +26,11 @@ export default class JobResource extends BaseResource {
   readonly updated_at: Date = new Date(0)
 
   pk() {
-    return this.id?.toString();
+    return this.id?.toString()
   }
 
   get createdAt(): moment.Moment {
-    return moment(this.created_at);
+    return moment(this.created_at)
   }
 
   get firstInitial(): string {
@@ -38,23 +38,23 @@ export default class JobResource extends BaseResource {
   }
 
   get updatedAt(): moment.Moment {
-    return moment(this.updated_at);
+    return moment(this.updated_at)
   }
 
-  static urlRoot = `${API_PATH}/jobs`;
+  static urlRoot = `${API_PATH}/jobs`
 
   static detailShape<T extends typeof Resource>(this: T) {
     return {
       ...super.detailShape(),
       schema: { data: this.asSchema() },
-    };
+    }
   }
 
   static listShape<T extends typeof Resource>(this: T) {
     return {
       ...super.listShape(),
       schema: { data: [this.asSchema()] },
-    };
+    }
   }
   
   static partialUpdateShape<T extends typeof Resource>(
@@ -67,6 +67,6 @@ export default class JobResource extends BaseResource {
     return {
       ...super.partialUpdateShape(),
       schema: { data: this.asSchema() },
-    };
+    }
   }
 }

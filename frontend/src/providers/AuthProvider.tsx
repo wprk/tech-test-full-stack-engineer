@@ -1,7 +1,7 @@
 import React, { useEffect, useState, ReactNode } from 'react'
 import jwtDecoder from 'jwt-decode'
 
-const AUTH_LOCALSTORAGE_KEY = 'auth'
+export const AUTH_LOCALSTORAGE_KEY = 'auth'
 const DUMMY_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiZXhwaXJ5IjoxNjA5NDU5MTk5fQ.Ay9kGt_-fbSGLx3U-cxpKgLOGIDkXfJXK2oIXVHQcoA'
 
 interface Auth {
@@ -36,6 +36,7 @@ const DEFAULT_AUTHCONTEXT: AuthContextType = {
 }
 
 export const AuthContext = React.createContext(DEFAULT_AUTHCONTEXT)
+export const AuthConsumer = AuthContext.Consumer
 
 interface IProps {
   children: ReactNode

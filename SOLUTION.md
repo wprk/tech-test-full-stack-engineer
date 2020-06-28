@@ -45,6 +45,9 @@ I have added unit tests to all my controllers and services as well as several in
 
 # Frontend
 
+#### Authentication
+I added a very basic example of how I'd go about adding authentication to this application, I didn't have time to build the server side for authentication but you should be able to see how I would of gone about it from the frontend perspective. I built out an AuthProvider class and mocked out what the response from the server would be with a basic JWT token (set to expire at the end of the year). I then wrapped the Route for the jobs page with the ProtectedRoute component and redirect to the /login page if the user isn't authenticated. Whenever we have a token I then pass it along to all API calls where it would of been checked by the Auth middleware (if I had time to add it) before returning results.
+
 #### Config
 As with the backend for any real-world application you should always seperate your environment variables out from your code. I only have the one environment variable containing the `API_PATH` but this was extracted out to ensure the frontend could be deployed and configured to use a different API in the future. I have also committed the .env file again here to ensure it works for you but would not do this with a real application as the file would likely contain secrets you wouldn't want accessible in the codebase.
 
@@ -73,7 +76,7 @@ I considered several solutions for handling API requests and state management. I
 In the mockups I was given all jobs had a small description but in the real-world this is unlikely to be the case. To prevent the cards from growing too large I added some styles to ensure a description of more than 4 lines would be truncated and would only expand on hover. It also shows an elipsis to indicate that there is more content to be displayed. I also considered making this description section scrollable but thought this might be frustrating for the user and it would be nicer for them to be able to read the full description on hover.
 
 # Potential improvements
-- Authentication
+- Database improvements
   - Users
   - Permissions
 - Full test coverage
@@ -82,9 +85,9 @@ In the mockups I was given all jobs had a small description but in the real-worl
 - Improve documentation, potentially add an OpenAPI library like Swagger for self-documenting API
 - Add infrastructure as code to facilitate CICD
 - Dont expose the id of jobs table and add a non-incremental id to prevent enumeration attacks
-- Implement either pagination or infinite scrolling to the JobLists. I built the functionality into the backend but ran out of time to implement it on the frontend.
-- Use seperate routes for invited and accepted so that the state is persisted on refresh.
+- Implement either pagination or infinite scrolling to the JobLists. I built the functionality into the backend but ran out of time to implement it on the frontend
+- Use seperate routes for invited and accepted so that the state is persisted on refresh
 - Improve accessibility across the site but particularly with the Tabs component. A quick improvemnt would be adding correct aria labels
 - Add animations to tab active state and cards
-- Improved typehinting throughout both applications but particularly on the frontend.
+- Improved typehinting throughout both applications but particularly on the frontend
 - Fix issue with description hover where you can't immediately click a button as they move when you're no longer hovering

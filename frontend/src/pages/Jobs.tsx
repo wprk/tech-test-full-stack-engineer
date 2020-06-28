@@ -1,20 +1,22 @@
 import React, { Suspense, useState } from 'react'
-import { NetworkErrorBoundary } from 'rest-hooks';
+import { NetworkErrorBoundary } from 'rest-hooks'
 import classNames from 'classnames'
 
 import AcceptedJobsList from '../components/AcceptedJobsList'
 import { JobStatus } from '../resources/JobResource'
-import JobsListError from '../components/JobsListError';
-import JobsListLoading from '../components/JobsListLoading';
+import JobsListError from '../components/JobsListError'
+import JobsListLoading from '../components/JobsListLoading'
+import LogoutBtn from '../components/LogoutBtn'
 import NewJobsList from '../components/NewJobsList'
-import Tabs from '../components/Tabs/Tabs';
-import Tab from '../components/Tabs/Tab';
+import Tabs from '../components/Tabs/Tabs'
+import Tab from '../components/Tabs/Tab'
 
 const Jobs = () => {
   const [activeTab, setActiveTab] = useState<JobStatus>(JobStatus.NEW)
 
   return (
-    <div className="w-full h-full min-h-screen bg-gray-300 flex justify-center">
+    <div className="w-full h-full min-h-screen flex justify-center">
+      <LogoutBtn />
       <div className="flex-1 max-w-3xl p-4 space-y-4">
         <Tabs>
           <React.Fragment>

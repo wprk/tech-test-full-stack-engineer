@@ -16,7 +16,7 @@ const Login = () => {
   }, [history, isAuthenticated])
 
   return (
-    <div className="min-h-screen bg-gray-200 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="h-full min-h-screen flex flex-col justify-center sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img className="mx-auto h-20 w-auto" src={logoImg} alt="Company Logo" />
         <h2 className="mt-4 text-center text-3xl leading-9 font-extrabold text-gray-900">
@@ -27,7 +27,7 @@ const Login = () => {
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-8 mx-4 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form action="#" onSubmit={(e: React.FormEvent) => {
             e.preventDefault()

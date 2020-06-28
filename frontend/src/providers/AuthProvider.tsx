@@ -16,7 +16,8 @@ export interface AuthContextType extends Auth {
   onLogin: (email: string, password: string) => void,
   onLoginWithFacebook: () => void,
   onLoginWithTwitter: () => void,
-  onLoginWithGitHub: () => void
+  onLoginWithGitHub: () => void,
+  onLogout: () => void
 }
 
 const DEFAULT_AUTH: Auth = {
@@ -32,7 +33,8 @@ const DEFAULT_AUTHCONTEXT: AuthContextType = {
   onLogin: () => {},
   onLoginWithFacebook: () => {},
   onLoginWithTwitter: () => {},
-  onLoginWithGitHub: () => {}
+  onLoginWithGitHub: () => {},
+  onLogout: () => {}
 }
 
 export const AuthContext = React.createContext(DEFAULT_AUTHCONTEXT)
@@ -92,6 +94,12 @@ const AuthProvider = ({ children }: IProps) => {
     handleAuthentication(DUMMY_TOKEN)
   }
 
+  const onLogout = async () => {
+    setAuthenticating(true)
+
+    logoutSuccess()
+  }
+
   const handleAuthentication = (token: string) => {
     setTimeout(() => {
       const decodedToken: any = jwtDecoder(DUMMY_TOKEN)
@@ -127,6 +135,7 @@ const AuthProvider = ({ children }: IProps) => {
         onLoginWithFacebook,
         onLoginWithTwitter,
         onLoginWithGitHub,
+        onLogout,
       }}
     >
       {children}

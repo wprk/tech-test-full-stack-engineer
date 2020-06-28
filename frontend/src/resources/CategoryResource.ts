@@ -25,6 +25,6 @@ export default class CategoryResource extends AuthenticatedResource {
     return {
       ...super.listShape(),
       schema: { data: [this.asSchema()] },
-    
+    }
   }
 }

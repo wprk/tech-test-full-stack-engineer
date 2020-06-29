@@ -1,4 +1,9 @@
+import { classToClass } from 'class-transformer'
 import { Injectable } from '@nestjs/common';
+
+import { UserFindAllInput } from './dto/user.find-all.input';
+import { UsersResponseDto } from './dto/users.response.dto';
+import { UserResponseDto } from './dto/user.response.dto';
 
 export type User = any;
 
@@ -26,7 +31,27 @@ export class UserService {
     ];
   }
 
-  async findOne(email: string): Promise<User | undefined> {
-    return this.users.find(user => user.email === email);
+  async findAll(
+    criteria: UserFindAllInput,
+  ): Promise<UsersResponseDto> {
+    const total = this.users.length // await this.userRepository.count(getAsFindManyOptions(criteria))
+    const users = this.users // await this.categoryRepository.find(getAsFindManyOptions(criteria))
+
+    return {
+      data: classToClass(users),
+      limit: criteria.limit,
+      page: criteria.page,
+      total,
+    }
+  }
+
+  async findOneByEmail(email: string): Promise<User | undefined> {
+    return this.users.find(user => user.email === email)
+  }
+
+  async findOne(userId: number): Promise<UserResponseDto> {
+    return {
+      data: this.users.find(user => user.userId === userId)
+    }
   }
 }

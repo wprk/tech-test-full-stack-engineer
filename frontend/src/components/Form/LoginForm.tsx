@@ -3,7 +3,7 @@ import { Form, Formik, FormikProps } from 'formik'
 
 import Button from '../Button'
 import MyTextField from './MyTextInput'
-import MyCheckbox from './MyCheckbox'
+// import MyCheckbox from './MyCheckbox'
 import MyFormError from './MyFormError'
 
 interface IProps {
@@ -24,8 +24,8 @@ interface LoginFormValues {
 const LoginForm = ({ authError, onSubmit }: IProps) => (
   <Formik
     initialValues={{
-      email: 'wprk14@gmail.com',
-      password: 'changem',
+      email: '',
+      password: '',
       remember: false,
     }}
     onSubmit={(values: LoginFormValues) => {
@@ -58,17 +58,17 @@ const LoginForm = ({ authError, onSubmit }: IProps) => (
           />
         </div>
 
-        <div className="mt-6 flex items-center justify-between">
+        {/* <div className="mt-6 flex items-center justify-between">
           <MyCheckbox name="remember">
             <span>Remember me</span>
           </MyCheckbox>
 
-          {/* <div className="text-sm leading-5">
+          <div className="text-sm leading-5">
             <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
               Forgot your password?
             </a>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
 
         <div className="mt-6">
           <span className="block w-full rounded-md shadow-sm">

@@ -43,11 +43,11 @@ export default class UserResource extends AuthenticatedResource {
     return {
       ...this.detailShape(),
       getFetchKey: () => {
-        return '/current';
+        return `${this.urlRoot}/current`
       },
       fetch: (params: {}, body?: Readonly<object | string>) => {
-        return this.fetch('get', `/users/current`, body);
+        return this.fetch('get', `${this.urlRoot}/current`, body)
       },
-    };
+    }
   }
 }

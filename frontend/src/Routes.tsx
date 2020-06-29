@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound'
 const Routes = () => (
   <Switch>
     <ProtectedRoute exact path="/" component={Jobs} />
-    
+
     <Route exact path="/login" component={Login} />
     <Route path="*" component={NotFound} />
   </Switch>

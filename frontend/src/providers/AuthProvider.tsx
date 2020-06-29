@@ -75,10 +75,6 @@ const AuthProvider = ({ children }: IProps) => {
     }
   }, [])
 
-  const clearErrors = () => {
-    setError('')
-  }
-
   const onLogin = async (email: string, password: string) => {
     setError(null)
     setIsAuthenticating(true)

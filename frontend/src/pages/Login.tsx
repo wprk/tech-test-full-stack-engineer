@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, Suspense } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { NetworkErrorBoundary } from 'rest-hooks'
 
 import logoImg from '../assets/logo.png'
 import LoginForm from '../components/Form/LoginForm'

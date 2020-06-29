@@ -1,8 +1,10 @@
 import React, { useEffect, useState, ReactNode } from 'react'
 import jwtDecoder from 'jwt-decode'
+import { useFetcher } from 'rest-hooks'
+import AuthResource from '../resources/AuthResource'
 
 export const AUTH_LOCALSTORAGE_KEY = 'auth'
-const DUMMY_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxIiwiZXhwaXJ5IjoxNjA5NDU5MTk5fQ.Ay9kGt_-fbSGLx3U-cxpKgLOGIDkXfJXK2oIXVHQcoA'
+const DUMMY_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU5MzQyNjUzMiwiZXhwIjoxNjA5NDU5MTk5fQ.b7oTadgi836E4w_2H1687z1LaVFJo9FgiUNWGqN9vqc'
 
 interface Auth {
   expiry: number | null,
@@ -11,6 +13,8 @@ interface Auth {
 }
 
 export interface AuthContextType extends Auth {
+  error: string | null,
+  hasError: boolean,
   isAuthenticating: boolean,
   isAuthenticated: boolean,
   onLogin: (email: string, password: string) => void,
@@ -28,6 +32,8 @@ const DEFAULT_AUTH: Auth = {
 
 const DEFAULT_AUTHCONTEXT: AuthContextType = {
   ...DEFAULT_AUTH,
+  error: null,
+  hasError: false,
   isAuthenticating: true,
   isAuthenticated: false,
   onLogin: () => {},
@@ -45,8 +51,11 @@ interface IProps {
 }
 
 const AuthProvider = ({ children }: IProps) => {
-  const [authenticating, setAuthenticating] = useState<boolean>(DEFAULT_AUTHCONTEXT.isAuthenticating)
+  const login = useFetcher(AuthResource.loginShape());
+
   const [auth, setAuth] = useState<Auth>(DEFAULT_AUTH)
+  const [error, setError] = useState<string | null>(DEFAULT_AUTHCONTEXT.error)
+  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(DEFAULT_AUTHCONTEXT.isAuthenticating)
 
   useEffect(() => {
     // Check if currently logged in
@@ -54,82 +63,99 @@ const AuthProvider = ({ children }: IProps) => {
     
     if (session) {
       const sessionObj = JSON.parse(session)
-      const { expiry, token, userId } = sessionObj
+      const { exp, token, userId } = sessionObj
 
-      if (expiry > Math.floor(new Date().getTime() / 1000)) {
-        loginSuccess(token, userId, expiry)
+      if (exp > Math.floor(new Date().getTime() / 1000)) {
+        loginSuccess(token, userId, exp)
       } else {
         logoutSuccess()
       }
     } else {
-      setAuthenticating(false)
+      setIsAuthenticating(false)
     }
   }, [])
 
-  const onLogin = async (email: string, password: string) => {
-    setAuthenticating(true)
+  const clearErrors = () => {
+    setError('')
+  }
 
-    // Would get a token here from the server and pass it to handleAuthentication method
-    handleAuthentication(DUMMY_TOKEN)
+  const onLogin = async (email: string, password: string) => {
+    setError(null)
+    setIsAuthenticating(true)
+    try {
+      const response = await login({}, { email, password })
+
+      if (response && response.access_token) {
+        handleAuthentication(response.access_token)
+      }
+    } catch (error) {
+      setError('Unable to login. Please try again.')
+      logoutSuccess()
+    }
   }
 
   const onLoginWithFacebook = async () => {
-    setAuthenticating(true)
+    setError(null)
+    setIsAuthenticating(true)
 
     // Would get a token here from the provider and pass it to handleAuthentication method
     handleAuthentication(DUMMY_TOKEN)
   }
 
   const onLoginWithTwitter = async () => {
-    setAuthenticating(true)
+    setError(null)
+    setIsAuthenticating(true)
 
     // Would get a token here from the provider and pass it to handleAuthentication method
     handleAuthentication(DUMMY_TOKEN)
   }
 
   const onLoginWithGitHub = async () => {
-    setAuthenticating(true)
+    setError(null)
+    setIsAuthenticating(true)
 
     // Would get a token here from the provider and pass it to handleAuthentication method
     handleAuthentication(DUMMY_TOKEN)
   }
 
   const onLogout = async () => {
-    setAuthenticating(true)
+    setIsAuthenticating(true)
 
     logoutSuccess()
   }
 
   const handleAuthentication = (token: string) => {
     setTimeout(() => {
-      const decodedToken: any = jwtDecoder(DUMMY_TOKEN)
-      const { userId, expiry } = decodedToken
+      const decodedToken: any = jwtDecoder(token)
+      const { userId, exp } = decodedToken
   
       localStorage.setItem(
         AUTH_LOCALSTORAGE_KEY,
-        JSON.stringify({ expiry, token, userId })
+        JSON.stringify({ exp, token, userId })
       )
   
-      loginSuccess(token, userId, expiry)
+      loginSuccess(token, userId, exp)
     }, 500)
   }
 
   const loginSuccess = async (token: string, userId: string, expiry: number) => {
     setAuth({ expiry, token, userId })
-    setAuthenticating(false)
+    setIsAuthenticating(false)
   }
 
   const logoutSuccess = async () => {
     localStorage.removeItem(AUTH_LOCALSTORAGE_KEY)
     setAuth(DEFAULT_AUTH)
-    setAuthenticating(false)
+    setIsAuthenticating(false)
   }
 
   return (
     <AuthContext.Provider
       value={{
         ...auth,
-        isAuthenticating: authenticating,
+        error,
+        hasError: !! error,
+        isAuthenticating: isAuthenticating,
         isAuthenticated: !! auth.userId,
         onLogin,
         onLoginWithFacebook,

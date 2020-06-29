@@ -1,12 +1,13 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, Suspense } from 'react'
+import { useHistory } from 'react-router-dom'
+import { NetworkErrorBoundary } from 'rest-hooks'
 
 import logoImg from '../assets/logo.png'
-import Button from '../components/Button'
+import LoginForm from '../components/Form/LoginForm'
 import { AuthContext } from '../providers/AuthProvider'
-import { useHistory } from 'react-router-dom'
 
 const Login = () => {
-  const { isAuthenticated, onLogin, onLoginWithFacebook, onLoginWithTwitter, onLoginWithGitHub } = useContext(AuthContext)
+  const { error, isAuthenticated, onLogin, onLoginWithFacebook, onLoginWithTwitter, onLoginWithGitHub } = useContext(AuthContext)
   const history = useHistory()
 
   useEffect(() => {
@@ -29,39 +30,7 @@ const Login = () => {
 
       <div className="mt-8 mx-4 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form action="#" onSubmit={(e: React.FormEvent) => {
-            e.preventDefault()
-            onLogin('test@example.com', 'password123')
-          }}>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-5 text-gray-700">
-                Email address
-              </label>
-              <div className="mt-1 rounded-md shadow-sm">
-                <input autoComplete="on" id="email" type="email" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <label htmlFor="password" className="block text-sm font-medium leading-5 text-gray-700">
-                Password
-              </label>
-              <div className="mt-1 rounded-md shadow-sm">
-                <input autoComplete="on" id="password" type="password" required className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <span className="block w-full rounded-md shadow-sm">
-                <Button
-                  text="Sign in"
-                  type="submit"
-                  width="full"
-                />
-              </span>
-            </div>
-          </form>
-
+          <LoginForm authError={error} onSubmit={onLogin} />
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">

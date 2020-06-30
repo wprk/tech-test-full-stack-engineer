@@ -81,8 +81,8 @@ const AuthProvider = ({ children }: IProps) => {
     try {
       const response = await login({}, { email, password })
 
-      if (response && response.access_token) {
-        handleAuthentication(response.access_token)
+      if (response && response.data) {
+        handleAuthentication(response.data.access_token)
       }
     } catch (error) {
       setError('Unable to login. Please try again.')

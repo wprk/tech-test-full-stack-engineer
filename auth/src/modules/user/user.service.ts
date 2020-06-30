@@ -1,41 +1,38 @@
 import { classToClass } from 'class-transformer'
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { UserFindAllInput } from './dto/user.find-all.input';
 import { UsersResponseDto } from './dto/users.response.dto';
 import { UserResponseDto } from './dto/user.response.dto';
-
-export type User = any;
+import { User } from 'src/models/user.model';
+import { getAsFindManyOptions } from 'src/utils/repository-find-options.util';
+import { AuthRegisterInput } from '../auth/dto/auth.register.input';
 
 @Injectable()
 export class UserService {
-  private readonly users: User[];
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-  constructor() {
-    this.users = [
-      {
-        userId: 1,
-        email: 'wprk14@gmail.com',
-        password: 'changeme',
-      },
-      {
-        userId: 2,
-        email: 'chris@example.com',
-        password: 'secret',
-      },
-      {
-        userId: 3,
-        email: 'maria@example.com',
-        password: 'guess',
-      },
-    ];
+  async create(newUser: AuthRegisterInput): Promise<User> {
+    if (await this.userRepository.count({ where: { email: newUser.email }}) >= 1) {
+      throw new BadRequestException(`Accoount already exists for ${newUser.email}.`)
+    }
+
+    const user = this.userRepository.create(newUser)
+    await this.userRepository.save(user)
+
+    return classToClass(user)
   }
 
   async findAll(
     criteria: UserFindAllInput,
   ): Promise<UsersResponseDto> {
-    const total = this.users.length // await this.userRepository.count(getAsFindManyOptions(criteria))
-    const users = this.users // await this.categoryRepository.find(getAsFindManyOptions(criteria))
+    const total = await this.userRepository.count(getAsFindManyOptions(criteria))
+    const users = await this.userRepository.find(getAsFindManyOptions(criteria))
 
     return {
       data: classToClass(users),
@@ -46,12 +43,14 @@ export class UserService {
   }
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    return this.users.find(user => user.email === email)
+    return await this.userRepository.findOne({ where: { email }})
   }
 
-  async findOne(userId: number): Promise<UserResponseDto> {
+  async findOne(id: number): Promise<UserResponseDto> {
+    const user = await this.userRepository.findOne(id)
+
     return {
-      data: this.users.find(user => user.userId === userId)
+      data: classToClass(user)
     }
   }
 }

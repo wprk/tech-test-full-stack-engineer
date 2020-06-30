@@ -6,8 +6,10 @@ import {
   Patch,
   ParseIntPipe,
   Query,
+  UseGuards,
 } from '@nestjs/common'
 
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { JobFindAllInput } from './dto/job.find-all.input'
 import { JobFindOneInput } from './dto/job.find-one.input'
 import { JobUpdateInput } from './dto/job.update.input'
@@ -19,6 +21,7 @@ import { JobService } from './job.service'
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('/')
   async findAll(
     @Query() criteria: JobFindAllInput,
@@ -26,6 +29,7 @@ export class JobController {
     return await this.jobService.findAll(criteria)
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
@@ -34,6 +38,7 @@ export class JobController {
     return await this.jobService.findOne(id, criteria)
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,

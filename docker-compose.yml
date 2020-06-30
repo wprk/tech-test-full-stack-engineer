@@ -2,7 +2,7 @@ version: '3'
 
 services:
   auth:
-    entrypoint: ["npm", "start"]
+    entrypoint: ["npm", "run", "start:dev"]
     environment:
       NODE_ENV: development
     image: node:10.15-alpine
@@ -41,7 +41,7 @@ services:
       - hipages
 
   server:
-    entrypoint: ["npm", "start"]
+    entrypoint: ["npm", "run", "start:dev"]
     environment:
       NODE_ENV: development
     image: node:10.15-alpine

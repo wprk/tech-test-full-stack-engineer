@@ -4,10 +4,14 @@ import {
 } from 'typeorm'
 
 import { Job, JobStatus } from './job.model'
-import { Expose } from 'class-transformer'
+import { Exclude } from 'class-transformer'
 
 @ChildEntity(JobStatus.ACCEPTED)
 export class JobAccepted extends Job {
+  // @Exclude()
+  @Column()
+  accepted_by: number
+
   @Column()
   contact_name: string
 

@@ -12,5 +12,5 @@ export class JobFindAllInput extends PaginationInput {
 
   @IsEnum(JobRelationships, { each: true })
   @IsOptional()
-  with: string[]
+  with: string[] = []
 }

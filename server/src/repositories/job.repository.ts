@@ -1,29 +1,95 @@
-import { Job, JobStatus } from '../models/job.model'
+import { Job, JobStatus, JobRelationships } from '../models/job.model'
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
-import { User } from 'src/models/user.model';
 
-class JobScopes extends SelectQueryBuilder<Job> {
-  constructor(private authUser: User, builder: SelectQueryBuilder<Job>) {
-    super(builder);
-  }
-
-  get accepted(): JobScopes {
-    return this.andWhere("status = :status", { status: JobStatus.ACCEPTED })
-      .andWhere("accepted_by = :authUserId", { authUserId: this.authUser.id })
-  }
-
-  get declined(): JobScopes {
-    return this.andWhere("status = :status", { status: JobStatus.DECLINED })
-  }
-
-  get new(): JobScopes {
-    return this.andWhere("status = :status", { status: JobStatus.NEW })
-  }
-}
+import { AuthUser } from 'src/modules/auth/interfaces/auth.user.interface';
+import { JobFindOneInput } from 'src/modules/job/dto/job.find-one.input';
+import { JobFindAllInput } from 'src/modules/job/dto/job.find-all.input';
+import { Category } from 'src/models/category.model';
 
 @EntityRepository(Job)
 export class JobRepository extends Repository<Job> {
-  asUser(authUser: User): JobScopes {
-    return new JobScopes(authUser, this.createQueryBuilder("job"))
+  countJobsByCriteria(
+    {
+      page,
+      limit,
+      status,
+      with: relations = []
+    }: JobFindAllInput,
+    authUser: AuthUser = null
+  ) {
+    let query: SelectQueryBuilder<Job> = this.getSelectQueryBuilder()
+    let skip: number = (page - 1) * limit
+    let take: number = limit
+
+    if (status) {
+      query = query.where("jobs.status = :status", { status })
+
+      if (status === JobStatus.ACCEPTED) {
+        query = query.where("jobs.accepted_by = :authUserId", { authUserId: authUser.userId })
+      }
+    } else {
+      query = query.where("jobs.status != :status", { status: JobStatus.ACCEPTED })
+    }
+
+    query = query.skip(skip)
+    query = query.take(take)
+
+    relations.forEach((relation: string) => {
+      query = query.leftJoinAndSelect(`jobs.${relation}`, relation)
+    })
+
+    return query.getCount()
+  }
+
+  findJobsByCriteria({
+    page,
+    limit,
+    status,
+    with: relations = []
+  }: JobFindAllInput,
+  authUser: AuthUser = null
+) {
+    let query: SelectQueryBuilder<Job> = this.getSelectQueryBuilder()
+    let skip: number = (page - 1) * limit
+    let take: number = limit
+
+    if (status) {
+      query = query.where("jobs.status = :status", { status })
+
+      if (status === JobStatus.ACCEPTED) {
+        query = query.where("jobs.accepted_by = :authUserId", { authUserId: authUser.userId })
+      }
+    } else {
+      query = query.where("jobs.status != :status", { status: JobStatus.ACCEPTED })
+    }
+
+    query.skip(skip)
+    query.take(take)
+
+    relations.forEach((relation: string) => {
+      query = query.leftJoinAndSelect(`jobs.${relation}`, relation)
+    })
+
+    return query.getMany()
+  }
+
+  findOneJobByCriteria(
+    id: number,
+    {
+      with: relations
+    }: JobFindOneInput,
+    authUser: AuthUser = null
+  ) {
+    return this.findOneOrFail(id, { relations })
+  }
+
+  private getQueryBuilder()
+  {
+    return this.createQueryBuilder("jobs")
+  }
+
+  private getSelectQueryBuilder()
+  {
+    return this.getQueryBuilder().select()
   }
 }

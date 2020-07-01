@@ -1,4 +1,4 @@
-import { FindManyOptions, FindOneOptions } from "typeorm"
+import { FindManyOptions, FindOneOptions, ObjectLiteral, FindConditions } from "typeorm"
 
 export const getAsFindManyOptions = ({
   limit,
@@ -24,7 +24,9 @@ export const getAsFindOneOptions = ({
   }
 }
 
-const removeUndefinedCriteria = (criteria: object): object => {
+const removeUndefinedCriteria = (
+  criteria: ObjectLiteral | FindConditions<any> | FindConditions<any>[]
+): string | ObjectLiteral | FindConditions<any> | FindConditions<any>[] => {
   Object.keys(criteria).forEach((key) => (criteria[key] == null) && delete criteria[key])
 
   return criteria;

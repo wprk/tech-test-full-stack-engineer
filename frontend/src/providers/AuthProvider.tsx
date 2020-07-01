@@ -1,7 +1,6 @@
 import React, { useEffect, useState, ReactNode } from 'react'
 import jwtDecoder from 'jwt-decode'
 import { AUTH_PATH } from '../config'
-import { access } from 'fs'
 import accessTokenProvider from '../helpers/accessTokenProvider'
 
 export const AUTH_LOCALSTORAGE_KEY = 'auth'
@@ -56,15 +55,8 @@ const AuthProvider = ({ children }: IProps) => {
   const [error, setError] = useState<string | null>(DEFAULT_AUTHCONTEXT.error)
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(DEFAULT_AUTHCONTEXT.isAuthenticating)
 
-  // Check if currently logged in
   useEffect(() => {
-    try {
-      checkLoggedIn()
-    } catch(error) {
-      console.error(error)
-      setError('Your login has expired. Please login again.')
-      logoutSuccess()
-    }
+    checkLoggedIn()
   }, [])
 
   const onLogin = async (email: string, password: string) => {
@@ -115,12 +107,8 @@ const AuthProvider = ({ children }: IProps) => {
   }
 
   const handleAuthentication = (accessToken: string, refreshToken: string) => {
-    console.log('handling authentication')
-
     const decodedAccessToken: any = jwtDecoder(accessToken)
     const { userId, exp } = decodedAccessToken
-
-    console.log({ userId, exp })
 
     localStorage.setItem(
       AUTH_LOCALSTORAGE_KEY,
@@ -195,7 +183,6 @@ const AuthProvider = ({ children }: IProps) => {
   }
 
   const checkLoggedIn = async () => {
-    console.log('checking login')
     setIsAuthenticating(true)
     const session: string | null = localStorage.getItem(AUTH_LOCALSTORAGE_KEY)
     
@@ -210,9 +197,10 @@ const AuthProvider = ({ children }: IProps) => {
         } else {
           throw Error('Invalid access or refresh token')
         }
-      } catch (error) {
+      } catch(error) {
         console.error(error)
-        throw error
+        setError('Your login has expired. Please login again.')
+        logoutSuccess()
       }
     }
 

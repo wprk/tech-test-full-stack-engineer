@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common'
 
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
-import { AuthUser } from '../auth/interfaces/auth.user.interface'
+import { JwtAccessPayload } from '../auth/interfaces/jwt.access.payload.interface'
 import { JobFindAllInput } from './dto/job.find-all.input'
 import { JobFindOneInput } from './dto/job.find-one.input'
 import { JobUpdateInput } from './dto/job.update.input'
@@ -30,7 +30,7 @@ export class JobController {
     @Req() req: Request,
     @Query() criteria: JobFindAllInput,
   ): Promise<JobsResponseDto> {   
-    return await this.jobService.findAll(req.user as AuthUser, criteria)
+    return await this.jobService.findAll(req.user as JwtAccessPayload, criteria)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -40,7 +40,7 @@ export class JobController {
     @Param('id', ParseIntPipe) id: number,
     @Query() criteria: JobFindOneInput,
   ): Promise<JobResponseDto> {
-    return await this.jobService.findOne(req.user as AuthUser, id, criteria)
+    return await this.jobService.findOne(req.user as JwtAccessPayload, id, criteria)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -50,6 +50,6 @@ export class JobController {
     @Param('id', ParseIntPipe) id: number,
     @Body() changes: JobUpdateInput,
   ): Promise<JobResponseDto> {
-    return await this.jobService.update(req.user as AuthUser, id, changes)
+    return await this.jobService.changeStatus(req.user as JwtAccessPayload, id, changes)
   }
 }

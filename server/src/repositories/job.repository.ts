@@ -1,13 +1,29 @@
 import { Job, JobStatus, JobRelationships } from '../models/job.model'
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 
-import { AuthUser } from 'src/modules/auth/interfaces/auth.user.interface';
+import { JobAccepted } from 'src/models/job-accepted.model';
+import { JwtAccessPayload } from 'src/modules/auth/interfaces/jwt.access.payload.interface';
 import { JobFindOneInput } from 'src/modules/job/dto/job.find-one.input';
 import { JobFindAllInput } from 'src/modules/job/dto/job.find-all.input';
-import { Category } from 'src/models/category.model';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @EntityRepository(Job)
 export class JobRepository extends Repository<Job> {
+  changeStatus(
+    id: number,
+    status: JobStatus,
+    authUser: JwtAccessPayload
+  ) {
+    let jobPartial: QueryDeepPartialEntity<JobAccepted> = { status }
+
+    if (status === JobStatus.ACCEPTED) {
+      jobPartial['accepted_at'] = new Date
+      jobPartial['accepted_by'] = authUser.userId
+    }
+
+    return this.update({ id }, jobPartial)
+  }
+
   countJobsByCriteria(
     {
       page,
@@ -15,7 +31,7 @@ export class JobRepository extends Repository<Job> {
       status,
       with: relations = []
     }: JobFindAllInput,
-    authUser: AuthUser = null
+    authUser: JwtAccessPayload = null
   ) {
     let query: SelectQueryBuilder<Job> = this.getSelectQueryBuilder()
     let skip: number = (page - 1) * limit
@@ -47,7 +63,7 @@ export class JobRepository extends Repository<Job> {
     status,
     with: relations = []
   }: JobFindAllInput,
-  authUser: AuthUser = null
+  authUser: JwtAccessPayload = null
 ) {
     let query: SelectQueryBuilder<Job> = this.getSelectQueryBuilder()
     let skip: number = (page - 1) * limit
@@ -78,7 +94,7 @@ export class JobRepository extends Repository<Job> {
     {
       with: relations
     }: JobFindOneInput,
-    authUser: AuthUser = null
+    authUser: JwtAccessPayload = null
   ) {
     return this.findOneOrFail(id, { relations })
   }

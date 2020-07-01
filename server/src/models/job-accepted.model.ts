@@ -8,6 +8,9 @@ import { Exclude } from 'class-transformer'
 
 @ChildEntity(JobStatus.ACCEPTED)
 export class JobAccepted extends Job {
+  @Column()
+  accepted_at: Date
+
   // @Exclude()
   @Column()
   accepted_by: number

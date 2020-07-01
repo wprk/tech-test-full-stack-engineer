@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 
-import { AuthUser } from '../auth/interfaces/auth.user.interface'
+import { JwtAccessPayload } from '../auth/interfaces/jwt.access.payload.interface'
 import { JobFindAllInput } from './dto/job.find-all.input'
 import { JobFindOneInput } from "./dto/job.find-one.input";
 import { JobUpdateInput } from './dto/job.update.input'
@@ -23,7 +23,7 @@ export class JobService {
   ) {}
 
   async findAll(
-    authUser: AuthUser,
+    authUser: JwtAccessPayload,
     criteria: JobFindAllInput,
   ): Promise<JobsResponseDto> {
     const total = await this.jobRepository.countJobsByCriteria(criteria, authUser)
@@ -38,7 +38,7 @@ export class JobService {
   }
 
   async findOne(
-    authUser: AuthUser,
+    authUser: JwtAccessPayload,
     id: number,
     criteria: JobFindOneInput,
   ): Promise<JobResponseDto> {
@@ -49,8 +49,8 @@ export class JobService {
     }
   }
 
-  async update(
-    authUser: AuthUser,
+  async changeStatus(
+    authUser: JwtAccessPayload,
     id: number,
     data: JobUpdateInput
   ): Promise<JobResponseDto> {
@@ -60,7 +60,7 @@ export class JobService {
       throw new BadRequestException(`Unable to change status for job ${job.id} to ${data.status}`)
     }
 
-    await this.jobRepository.update({ id: job.id }, data)
+    await this.jobRepository.changeStatus(id, data.status, authUser)
     job = await this.jobRepository.findOneOrFail(id)
     
     return {

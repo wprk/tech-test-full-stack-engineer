@@ -4,16 +4,16 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtConstants } from '../constants';
 
 @Injectable()
-export class JwtRefrestStrategy extends PassportStrategy(Strategy) {
+export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt_refresh') {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
+      jwtFromRequest: ExtractJwt.fromBodyField('refresh_token'),
       ignoreExpiration: false,
-      secretOrKey: jwtConstants.secret,
+      secretOrKey: jwtConstants.refreshTokenSecret,
     });
   }
 
   async validate(payload: any) {
-    return { userId: payload.userId, revokeId: payload.revokeId };
+    return { type: 'refresh_token', userId: payload.userId, incrementId: payload.incrementId };
   }
 }

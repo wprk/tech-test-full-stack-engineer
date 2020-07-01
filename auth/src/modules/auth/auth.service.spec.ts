@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 describe('AuthService', () => {
@@ -16,11 +17,11 @@ describe('AuthService', () => {
         UserModule,
         PassportModule,
         JwtModule.register({
-          secret: jwtConstants.secret,
+          secret: jwtConstants.accessTokenSecret,
           signOptions: { expiresIn: '60s' },
         }),
       ],
-      providers: [AuthService, LocalStrategy, JwtStrategy],
+      providers: [AuthService, LocalStrategy, JwtStrategy, JwtRefreshStrategy],
     }).compile();
 
     service = moduleRef.get<AuthService>(AuthService);

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, ReactNode } from 'react'
 import jwtDecoder from 'jwt-decode'
-import { useFetcher } from 'rest-hooks'
-import AuthResource from '../resources/AuthResource'
+import { AUTH_PATH } from '../config'
+import { access } from 'fs'
+import accessTokenProvider from '../helpers/accessTokenProvider'
 
 export const AUTH_LOCALSTORAGE_KEY = 'auth'
 const DUMMY_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU5MzQyNjUzMiwiZXhwIjoxNjA5NDU5MTk5fQ.b7oTadgi836E4w_2H1687z1LaVFJo9FgiUNWGqN9vqc'
@@ -51,27 +52,18 @@ interface IProps {
 }
 
 const AuthProvider = ({ children }: IProps) => {
-  const login = useFetcher(AuthResource.loginShape());
-
   const [auth, setAuth] = useState<Auth>(DEFAULT_AUTH)
   const [error, setError] = useState<string | null>(DEFAULT_AUTHCONTEXT.error)
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(DEFAULT_AUTHCONTEXT.isAuthenticating)
 
+  // Check if currently logged in
   useEffect(() => {
-    // Check if currently logged in
-    const session: string | null = localStorage.getItem(AUTH_LOCALSTORAGE_KEY)
-    
-    if (session) {
-      const sessionObj = JSON.parse(session)
-      const { exp, token, userId } = sessionObj
-
-      if (exp > Math.floor(new Date().getTime() / 1000)) {
-        loginSuccess(token, userId, exp)
-      } else {
-        logoutSuccess()
-      }
-    } else {
-      setIsAuthenticating(false)
+    try {
+      checkLoggedIn()
+    } catch(error) {
+      console.error(error)
+      setError('Your login has expired. Please login again.')
+      logoutSuccess()
     }
   }, [])
 
@@ -79,12 +71,14 @@ const AuthProvider = ({ children }: IProps) => {
     setError(null)
     setIsAuthenticating(true)
     try {
-      const response = await login({}, { email, password })
-
-      if (response && response.data) {
-        handleAuthentication(response.data.access_token)
+      const { access_token, refresh_token } = await authLogin(email, password)
+      if (access_token && refresh_token) {
+        handleAuthentication(access_token, refresh_token)
+      } else {
+        throw Error('Invalid access or refresh token')
       }
     } catch (error) {
+      console.error(error)
       setError('Unable to login. Please try again.')
       logoutSuccess()
     }
@@ -95,7 +89,7 @@ const AuthProvider = ({ children }: IProps) => {
     setIsAuthenticating(true)
 
     // Would get a token here from the provider and pass it to handleAuthentication method
-    handleAuthentication(DUMMY_TOKEN)
+    handleAuthentication(DUMMY_TOKEN, DUMMY_TOKEN)
   }
 
   const onLoginWithTwitter = async () => {
@@ -103,7 +97,7 @@ const AuthProvider = ({ children }: IProps) => {
     setIsAuthenticating(true)
 
     // Would get a token here from the provider and pass it to handleAuthentication method
-    handleAuthentication(DUMMY_TOKEN)
+    handleAuthentication(DUMMY_TOKEN, DUMMY_TOKEN)
   }
 
   const onLoginWithGitHub = async () => {
@@ -111,7 +105,7 @@ const AuthProvider = ({ children }: IProps) => {
     setIsAuthenticating(true)
 
     // Would get a token here from the provider and pass it to handleAuthentication method
-    handleAuthentication(DUMMY_TOKEN)
+    handleAuthentication(DUMMY_TOKEN, DUMMY_TOKEN)
   }
 
   const onLogout = async () => {
@@ -120,28 +114,108 @@ const AuthProvider = ({ children }: IProps) => {
     logoutSuccess()
   }
 
-  const handleAuthentication = (token: string) => {
-    setTimeout(() => {
-      const decodedToken: any = jwtDecoder(token)
-      const { userId, exp } = decodedToken
-  
-      localStorage.setItem(
-        AUTH_LOCALSTORAGE_KEY,
-        JSON.stringify({ exp, token, userId })
-      )
-  
-      loginSuccess(token, userId, exp)
-    }, 500)
+  const handleAuthentication = (accessToken: string, refreshToken: string) => {
+    console.log('handling authentication')
+
+    const decodedAccessToken: any = jwtDecoder(accessToken)
+    const { userId, exp } = decodedAccessToken
+
+    console.log({ userId, exp })
+
+    localStorage.setItem(
+      AUTH_LOCALSTORAGE_KEY,
+      JSON.stringify({ exp, token: refreshToken, userId })
+    )
+
+    loginSuccess(accessToken, userId, exp)
   }
 
   const loginSuccess = async (token: string, userId: string, expiry: number) => {
+    accessTokenProvider.setAccessToken(token)
     setAuth({ expiry, token, userId })
     setIsAuthenticating(false)
   }
 
   const logoutSuccess = async () => {
+    accessTokenProvider.setAccessToken('')
+
     localStorage.removeItem(AUTH_LOCALSTORAGE_KEY)
     setAuth(DEFAULT_AUTH)
+    setIsAuthenticating(false)
+  }
+
+  const authLogin = async (email: string, password: string) => {
+    try {
+      const response = await fetch(`${AUTH_PATH}/auth/login`, {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json()
+        if (result.data) {
+          return result.data;
+        } else {
+          throw new Error('Invalid response received.')
+        }
+      } else {
+        throw new Error('Login request failed.')
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const authRefreshToken = async (refreshToken: string) => {
+    try {
+      const response = await fetch(`${AUTH_PATH}/auth/token/refresh`, {
+        method: 'POST',
+        body: JSON.stringify({ refresh_token: refreshToken }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json()
+        if (result.data) {
+          return result.data;
+        } else {
+          throw new Error('Invalid response received.')
+        }
+      } else {
+        throw new Error('Login request failed.')
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const checkLoggedIn = async () => {
+    console.log('checking login')
+    setIsAuthenticating(true)
+    const session: string | null = localStorage.getItem(AUTH_LOCALSTORAGE_KEY)
+    
+    if (session) {
+      const sessionObj = JSON.parse(session)
+      const { token: refreshToken } = sessionObj
+
+      try {
+        const { access_token, refresh_token } = await authRefreshToken(refreshToken)
+        if (access_token && refresh_token) {
+          handleAuthentication(access_token, refresh_token)
+        } else {
+          throw Error('Invalid access or refresh token')
+        }
+      } catch (error) {
+        console.error(error)
+        throw error
+      }
+    }
+
     setIsAuthenticating(false)
   }
 

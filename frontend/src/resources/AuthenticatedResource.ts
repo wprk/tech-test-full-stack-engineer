@@ -1,22 +1,9 @@
 import BaseResource from './BaseResource'
-import { AUTH_LOCALSTORAGE_KEY } from '../providers/AuthProvider'
-
-function useAuthToken() {
-  const session: string | null = localStorage.getItem(AUTH_LOCALSTORAGE_KEY) 
-    
-  if (session) {
-    const sessionObj = JSON.parse(session)
-    const { token } = sessionObj
-
-    return token
-  }
-
-  return null
-}
+import accessTokenProvider from '../helpers/accessTokenProvider'
 
 export default abstract class AuthenticatedResource extends BaseResource {
   static fetchOptionsPlugin = (options: RequestInit) => {
-    const token = useAuthToken()
+    const token = accessTokenProvider.getAccessToken() // useContext(AuthContext)
     let headers: HeadersInit = { ...options.headers }
 
     if (token) {

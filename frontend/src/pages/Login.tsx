@@ -6,14 +6,16 @@ import LoginForm from '../components/Form/LoginForm'
 import { AuthContext } from '../providers/AuthProvider'
 
 const Login = () => {
-  const { error, isAuthenticated, onLogin, onLoginWithFacebook, onLoginWithTwitter, onLoginWithGitHub } = useContext(AuthContext)
+  const { error, isAuthenticated, isAuthenticating, onLogin, onLoginWithFacebook, onLoginWithTwitter, onLoginWithGitHub } = useContext(AuthContext)
   const history = useHistory()
 
   useEffect(() => {
+    console.log('login redirect check')
+
     if (isAuthenticated) {
       history.replace('/')
     }
-  }, [history, isAuthenticated])
+  }, [history, isAuthenticated, isAuthenticating])
 
   return (
     <div className="h-full min-h-screen flex flex-col justify-center sm:px-6 lg:px-8">

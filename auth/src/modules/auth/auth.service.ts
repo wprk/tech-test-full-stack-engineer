@@ -7,8 +7,10 @@ import { AuthRegisterInput } from './dto/auth.register.input'
 import { AuthLoginResponseDto } from './dto/auth.login.response.dto'
 import { AuthRegisterResponseDto } from './dto/auth.register.response.dto'
 import { AuthTokenRefreshResponseDto } from './dto/auth.token.refresh.response.dto'
+import { JwtPayload } from './interfaces/jwt.payload.interface';
 import { User } from 'src/models/user.model'
 import { UserService } from '../user/user.service'
+import { JwtRefreshPayload } from './interfaces/jwt.refresh.payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +18,12 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
+
+  async validateToken(payload: JwtPayload): Promise<User | null> {
+    const user = await this.userService.findOneById(payload.userId)
+
+    return user || null
+  }
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findOneByEmail(email)
